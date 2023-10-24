@@ -1,7 +1,7 @@
 {
-  "name": "react-bootstrap",
+  "name": "ecommerce-project",
   "version": "1.0.0",
-  "description": "Basic skeleton codebase for React with Bootstrap applications.",
+  "description": "React capstone project.",
   "scripts": {
     "preinstall": "npm set audit false",
     "start": "webpack-dev-server --config webpack/dev.config.js --watch",
@@ -25,7 +25,7 @@
     "sass",
     "css module"
   ],
-  "author": "Your Name Here",
+  "author": "Iker Delgado",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bottega-code-school/js-builder/issues"
@@ -35,6 +35,7 @@
     "@popperjs/core": "2.3.2",
     "ajv": "6.12.0",
     "autoprefixer": "^9.1.0",
+    "axios": "^1.5.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^7.2.3",
@@ -57,10 +58,16 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "jquery": "3.5.0",
-    "sass": "1.54.5",
     "postcss-loader": "^2.1.6",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-dropzone-component": "^3.2.0",
+    "react-modal": "^3.16.1",
+    "react-redux": "7.2.0",
+    "react-router": "5.1.2",
+    "react-router-dom": "5.1.2",
+    "redux": "4.0.5",
+    "sass": "1.54.5",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.21.0",
     "webpack": "4.42.1",

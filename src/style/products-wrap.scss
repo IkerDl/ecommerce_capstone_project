@@ -1,0 +1,23 @@
+.general-wrapper {
+    background-color: blue;
+
+    h2{
+        display: flex;
+        justify-content: center;
+    }
+
+    .products-wrapper{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+      
+
+        div{
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    }
+    
+}
