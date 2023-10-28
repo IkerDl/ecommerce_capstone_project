@@ -203,6 +203,7 @@ def logout():
 
     return jsonify("User logged out")
 
+
 #Add to cart
 @app.route("/cart/add/<int:product_id>", methods=["POST"])
 def add_to_cart(product_id):
@@ -211,18 +212,37 @@ def add_to_cart(product_id):
     if product is None:
         return "Product not found", 404
 
-    cart_item = Cart(
-        cart_products_id=product.products_id,
-        cart_products_quantity=1,  # Puedes ajustar la cantidad según tus necesidades
-        cart_users_id=1,  # Ajusta esto para establecer el usuario actual o utiliza una sesión de usuario
-        cart_total_price=product.products_price  # Calcula el precio total en base al precio del producto
-    )
-    
-    db.session.add(cart_item)
+    cart_quantity = 1
+    user_id = 1
+
+    cart_item = Cart.query.filter_by(cart_products_id=product_id, cart_users_id=user_id).first()
+
+    if cart_item:
+        cart_item.cart_products_quantity += cart_quantity
+        cart_item.cart_total_price = product.products_price * cart_item.cart_products_quantity
+    else:
+        cart_item = Cart(
+            cart_products_id=product.products_id,
+            cart_products_quantity=cart_quantity,  # Puedes ajustar la cantidad según tus necesidades
+            cart_users_id=user_id,  # Ajusta esto para establecer el usuario actual o utiliza una sesión de usuario
+            cart_total_price=product.products_price * cart_quantity  # Calcula el precio total en base al precio del producto
+        )
+
+        db.session.add(cart_item)
     db.session.commit()
 
-    return "Product added to cart"
-    
+    response_data = {
+        "message": "Product added to cart",
+        "quantity": cart_item.cart_products_quantity,
+        "product_details": {
+            "product_id": product.products_id,
+            "product_name": product.products_name,
+            "product_price": product.products_price
+        }
+    }
+
+    return jsonify(response_data)
+
 
     
 if __name__ == '__main__':

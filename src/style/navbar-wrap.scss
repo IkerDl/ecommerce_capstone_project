@@ -1,0 +1,38 @@
+.navbar-wrapper{
+    background-color: rgba(66,176,41,255);
+    height: 80px;
+    width: 100%;
+    margin: 0;
+
+    h2 {
+        color: #fbfafa;
+        font-size: 20px;
+        border: solid 1px white;
+        border-radius: 15px;
+        padding: 5px 10px;
+        white-space: nowrap;
+    }
+    .logo-container {
+        img {
+            width: 20%; 
+            height: 20%; 
+            border-radius: 10px;
+            
+            
+             
+        }
+    }
+
+    .cart-logo {
+        font-size: 25px;
+        color:#fbfafa;
+        transition: transform 0.5s;
+    }
+
+    .cart-logo:hover {
+        color:black;
+        transform: rotate(360deg);
+    
+    }
+    
+}
