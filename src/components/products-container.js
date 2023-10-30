@@ -9,8 +9,17 @@ export default class ProductsComponent extends Component {
     super();
 
     this.state = {
-      productsItems: [], // Inicialmente, no tienes productos
+      productsItems: [],
+      cartItems: []
     };
+  }
+
+  addToCart = (productId) => {
+    console.log(`Añadido al carrito: Producto ID ${productId}`);
+    const { cartItems } = this.state;
+    const productToAdd = this.state.productsItems.find(product => product.products_id === productId);
+    const updatedCart = [...cartItems, productToAdd];
+    this.setState({ cartItems: updatedCart });
   }
 
   componentDidMount() {
@@ -43,7 +52,7 @@ export default class ProductsComponent extends Component {
                 <h2>{product.products_name}</h2>
                 <p>{product.products_description}</p>
                 <p>Price: ${parseFloat(product.products_price).toFixed(2)}</p>
-                <div className="cart-icon">
+                <div className="cart-icon" onClick={() => this.addToCart(product.products_id)}>
                   <FontAwesomeIcon icon={faCartPlus} />
                 </div>
               </div>

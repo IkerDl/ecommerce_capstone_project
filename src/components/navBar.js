@@ -3,7 +3,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 export default class NavBar extends Component {
+  constructor(props) {
+    super(props)
+    this.state ={
+      cartItemsCount: 0,
+    };
+  }
+
+  
+
+
     render() {
+      const {cartItemsCount, isCartOpen} = this.state;
+      
       return (
         <div className='navbar-wrapper'>
           <div className='logo-container'>
@@ -17,8 +29,9 @@ export default class NavBar extends Component {
           <div className='about-container'>
             <h2>About us</h2>
           </div>
-          <div className='cart-logo'>
+          <div className='cart-icon'>
             <FontAwesomeIcon icon={faCartShopping} />
+            <span>{this.state.cartItemsCount}</span>
           </div>
         </div>
       )

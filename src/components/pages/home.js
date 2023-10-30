@@ -2,6 +2,7 @@ import React from 'react';
 import NavBar from '../navBar';
 import Carrousel from '../carrousel';
 import ProductsComponent from '../products-container';
+import Cart from '../cart';
 
 
 export default function() {
@@ -10,6 +11,7 @@ export default function() {
         <NavBar />
         <Carrousel />
         <ProductsComponent />
+        <Cart />
         
     </div>
   );
