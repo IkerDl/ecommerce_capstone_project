@@ -5,10 +5,10 @@ import ProductsComponent from '../products-container';
 import Cart from '../cart';
 
 
-export default function() {
+export default function({ isUserLoggedIn, onLogout }) {
   return (
     <div className='homePage-wrapper'>
-        <NavBar />
+        <NavBar isUserLoggedIn={isUserLoggedIn} onLogout={onLogout} />
         <Carrousel />
         <ProductsComponent />
         <Cart />

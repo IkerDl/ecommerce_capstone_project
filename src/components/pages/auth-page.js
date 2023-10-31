@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import { withRouter } from 'react-router-dom';
+
 
 class AuthPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoggedIn : false,
       isRegister: true, // Para alternar entre registro e inicio de sesión
       firstname: "",
       lastname: "",
@@ -40,6 +43,7 @@ class AuthPage extends Component {
 
       if (response.status === 200) {
         // El registro o inicio de sesión fue exitoso, redirige a la página principal u otra página deseada
+        this.props.onLogin();
         this.props.history.push("/");
       } else {
         // Maneja errores de registro o inicio de sesión, como credenciales incorrectas
@@ -109,4 +113,4 @@ class AuthPage extends Component {
   }
 }
 
-export default AuthPage;
+export default withRouter(AuthPage);

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+
 class LoginPage extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +33,7 @@ class LoginPage extends Component {
 
       if (response.status === 200) {
         // El inicio de sesión fue exitoso, redirige a la página principal u otra página deseada
+        this.props.onLogin();
         this.props.history.push("/");
       } else {
         // Maneja errores de inicio de sesión, como credenciales incorrectas
