@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import Register from './pages/auth-page';
 
 export default class NavBar extends Component {
   constructor(props) {
@@ -9,9 +10,6 @@ export default class NavBar extends Component {
       cartItemsCount: 0,
     };
   }
-
-  
-
 
     render() {
       const {cartItemsCount, isCartOpen} = this.state;

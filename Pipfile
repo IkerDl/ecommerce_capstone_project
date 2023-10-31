@@ -11,6 +11,7 @@ flask-sqlalchemy = "*"
 marshmallow-sqlalchemy = "*"
 werkzeug = "*"
 flask-cors = "*"
+flask-login = "*"
 
 [dev-packages]
 

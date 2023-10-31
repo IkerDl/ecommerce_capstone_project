@@ -4,7 +4,7 @@ from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
-
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
 
 app = Flask(__name__)
@@ -40,7 +40,7 @@ class ProductSchema(ma.Schema):
 product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
         
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "users"
     users_id = db.Column(db.Integer, primary_key=True, nullable=False, unique=True)
     users_firstname = db.Column(db.String, nullable=False)
@@ -73,8 +73,9 @@ class Cart(db.Model):
     cart_products_id = db.Column(db.Integer, db.ForeignKey('products.products_id'), nullable=False)
     cart_product = relationship('Product', backref='cart_items')
     cart_products_quantity = db.Column(db.Integer, nullable=False)
-    cart_users_id = db.Column(db.Integer, nullable=False)
+    cart_users_id = db.Column(db.Integer, db.ForeignKey('users.users_id'), nullable=False)
     cart_total_price = db.Column(db.Float(precision=2), nullable=False)
+    user = relationship("User", backref="carts")
 
     def __init__(self, cart_products_id, cart_products_quantity, cart_users_id, cart_total_price):
         self.cart_products_id = cart_products_id
@@ -90,6 +91,13 @@ cart_schema = CartSchema()
 carts_schema = CartSchema(many=True)
 
 
+login_manager = LoginManager()
+login_manager.login_view = "login"
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.route('/product/get', methods=["GET"])
 def get_products():
@@ -173,6 +181,10 @@ def register():
     users_password = post_data.get("users_password")
     users_firstname = post_data.get("users_firstname")
     users_lastname = post_data.get("users_lastname")
+
+    existing_user = User.query.filter_by(users_email=users_email).first()
+    if existing_user:
+        return jsonify({'message': 'La dirección de correo electrónico ya está registrada'}), 409
 
 
     new_record = User(users_firstname,users_lastname,users_email, users_password)
@@ -303,9 +315,10 @@ def remove_from_cart(cart_id, product_id):
 
 #Añadir producto a un carrito 
 @app.route('/cart/add/<int:product_id>', methods=["POST"])
+@login_required
 def add_to_cart(product_id):
+    user_id = current_user.get_id()
     product = db.session.query(Product).filter(Product.products_id == product_id).first()
-    user_id = 1  # Debes establecer el usuario actual o usar una sesión de usuario
 
     if product is None:
         return jsonify("Producto no encontrado"), 404
