@@ -191,7 +191,10 @@ def register():
     db.session.add(new_record)
     db.session.commit()
 
-    return jsonify(user_schema.dump(new_record))
+    return jsonify({
+        'message': 'Usuario registrado exitosamente',
+        'user_id': new_record.users_id
+    })
 
 #Login
 
@@ -209,9 +212,9 @@ def login():
     if user:
         if user.users_password == users_password:
             session["user_id"] = user.users_id
-            return jsonify("User logged in")
+            return jsonify({"message": "User logged in", "user_id": user.users_id})
     
-    return jsonify("Invalid email or password")
+    return jsonify("Invalid email or password"),401
 
 #Logout
 @app.route("/logout", methods=["POST"])
@@ -229,15 +232,15 @@ def get_all_carts():
 
 #Ver los productos de un carrito por su id.
 
-@app.route('/cart/get/<int:cart_id>', methods=["GET"])
-def get_cart_items(cart_id):
-    cart_items = db.session.query(Cart).filter(Cart.cart_id == cart_id).all()
+@app.route('/cart/user/<int:user_id>', methods=["GET"])
+def get_user_cart_items(user_id):
+    user_cart = db.session.query(Cart).filter(Cart.cart_users_id == user_id).all()
 
-    if not cart_items:
-        return jsonify("Carrito no encontrado"), 404
+    if not user_cart:
+        return jsonify("Carrito no encontrado para el usuario"), 404
 
-    cart_products = []
-    for cart_item in cart_items:
+    user_cart_products = []
+    for cart_item in user_cart:
         product = db.session.query(Product).filter(Product.products_id == cart_item.cart_products_id).first()
         if product:
             cart_product_data = {
@@ -247,9 +250,10 @@ def get_cart_items(cart_id):
                 'quantity': cart_item.cart_products_quantity,
                 'total_price': cart_item.cart_total_price
             }
-            cart_products.append(cart_product_data)
+            user_cart_products.append(cart_product_data)
 
-    return jsonify(cart_products)
+    return jsonify(user_cart_products)
+
 
 #Editar la cantidad de productos en ese carrito
 
@@ -315,9 +319,9 @@ def remove_from_cart(cart_id, product_id):
 
 #Añadir producto a un carrito 
 @app.route('/cart/add/<int:product_id>', methods=["POST"])
-@login_required
+
 def add_to_cart(product_id):
-    user_id = current_user.get_id()
+    user_id = request.json.get("user_id")
     product = db.session.query(Product).filter(Product.products_id == product_id).first()
 
     if product is None:

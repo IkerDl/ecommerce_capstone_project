@@ -15,11 +15,20 @@ export default class ProductsComponent extends Component {
   }
 
   addToCart = (productId) => {
-    console.log(`Añadido al carrito: Producto ID ${productId}`);
-    const { cartItems } = this.state;
-    const productToAdd = this.state.productsItems.find(product => product.products_id === productId);
-    const updatedCart = [...cartItems, productToAdd];
-    this.setState({ cartItems: updatedCart });
+    // Aquí debes obtener el userId de alguna manera (por ejemplo, desde el estado o el contexto)
+    const userId = this.props.userId; // Esto es solo un ejemplo, deberás obtenerlo de forma dinámica
+
+    axios.post(`http://localhost:5000/cart/add/${productId}`,{user_id: userId})
+      .then(response => {
+        console.log("Respuesta del servidor:", response.data);
+
+        // Actualiza el estado del carrito en la interfaz de usuario
+        const updatedCart = [...this.state.cartItems, response.data.product_details];
+        this.setState({ cartItems: updatedCart });
+      })
+      .catch(error => {
+        console.error('Error al agregar el producto al carrito:', error);
+      });
   }
 
   componentDidMount() {

@@ -9,16 +9,17 @@ export default class App extends Component {
   constructor(props) {
     super()
     this.state = {
-      isUserLoggedIn: false
+      isUserLoggedIn: false,
+      userId: null
     }
   }
 
-  handleLogin = () => {
-    this.setState({isUserLoggedIn: true})
+  handleLogin = (userId) => {
+    this.setState({isUserLoggedIn: true, userId: userId})
   }
 
   handleLogout = () => {
-    this.setState({ isUserLoggedIn: false });
+    this.setState({ isUserLoggedIn: false, userId: null });
   }
 
   render() {
@@ -36,8 +37,9 @@ export default class App extends Component {
           <Switch>
             <Route exact path="/" render={() => (
               <Home
-               isUserLoggedIn={this.state.isUserLoggedIn}
+                isUserLoggedIn={this.state.isUserLoggedIn}
                 onLogout={this.handleLogout}
+                userId={this.state.userId}
               />
               )} />
             <Route path="/auth">
@@ -45,6 +47,7 @@ export default class App extends Component {
                 isUserLoggedIn={this.state.isUserLoggedIn}
                 onLogin={this.handleLogin}
                 onLogout={this.handleLogout}
+                userId={this.state.userId}
               />
             </Route> 
             <Route path="/contact" component={Contact} />

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import axios from "axios";
 
 class LoginPage extends Component {
   constructor(props) {
@@ -23,22 +23,24 @@ class LoginPage extends Component {
 
     try {
       // Enviar datos al servidor para el inicio de sesión
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ users_email: email, users_password: password }), // Asegúrate de enviar los campos correctos
+      const response = await axios.post("http://localhost:5000/login", {
+        users_email: email,
+        users_password: password
       });
 
       if (response.status === 200) {
         // El inicio de sesión fue exitoso, redirige a la página principal u otra página deseada
-        this.props.onLogin();
+        const data = response.data;
+        this.props.onLogin(data.user_id);
         this.props.history.push("/");
-      } else {
-        // Maneja errores de inicio de sesión, como credenciales incorrectas
-        const data = await response.json();
-        this.setState({ error: data.message });
+      } else{
+        if (response.status === 401) {
+          this.setState({ error: "Credenciales incorrectas. Por favor, verifica tu email y contraseña." });
+        } else {
+          // Maneja errores de inicio de sesión, como credenciales incorrectas
+          const data = response.data
+          this.setState({ error: data.message });
+        }
       }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);

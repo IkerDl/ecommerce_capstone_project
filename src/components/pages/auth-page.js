@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from 'react-router-dom';
+import axios from "axios";
 
 
 class AuthPage extends Component {
@@ -23,37 +24,32 @@ class AuthPage extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     const { isRegister, firstname, lastname, email, password } = this.state;
-
+  
     try {
       const url = isRegister ? "http://localhost:5000/user/register" : "http://localhost:5000/login";
       const body = isRegister
         ? { users_firstname: firstname, users_lastname: lastname, users_email: email, users_password: password }
         : { users_email: email, users_password: password };
-
-      // Enviar datos al servidor para el registro o inicio de sesión
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-
+  
+      // Enviar datos al servidor para el registro o inicio de sesión utilizando Axios
+      const response = await axios.post(url, body);
+  
       if (response.status === 200) {
-        // El registro o inicio de sesión fue exitoso, redirige a la página principal u otra página deseada
-        this.props.onLogin();
+        const data = response.data;
+        this.props.onLogin(data.user_id); // Pasa el ID del usuario al componente App
         this.props.history.push("/");
       } else {
         // Maneja errores de registro o inicio de sesión, como credenciales incorrectas
-        const data = await response.json();
+        const data = response.data;
         this.setState({ error: data.message });
       }
     } catch (error) {
       console.error("Error al registrar o iniciar sesión:", error);
     }
   };
+  
 
   toggleAuth = () => {
     this.setState((prevState) => ({ isRegister: !prevState.isRegister, error: "" }));
