@@ -16,18 +16,26 @@ export default class ProductsComponent extends Component {
 
   addToCart = (productId) => {
     const userId = this.props.userId;
-    axios.post(`http://localhost:5000/cart/add/${productId}`,{user_id: userId})
-      .then(response => {
-        console.log("Respuesta del servidor:", response.data);
-
-        // Actualiza el estado del carrito en la interfaz de usuario
-        const updatedCart = [...this.state.cartItems, response.data.product_details];
-        this.setState({ cartItems: updatedCart });
-      })
-      .catch(error => {
-        console.log('Error al agregar el producto al carrito:', error);
-      });
+  
+    // Verifica si el userId es válido (no es null o undefined) antes de realizar la solicitud POST
+    if (userId) {
+      axios.post(`http://localhost:5000/cart/add/${productId}`, { user_id: userId })
+        .then(response => {
+          console.log("Respuesta del servidor:", response.data);
+  
+          // Actualiza el estado del carrito en la interfaz de usuario
+          const updatedCart = [...this.state.cartItems, response.data.product_details];
+          this.setState({ cartItems: updatedCart });
+        })
+        .catch(error => {
+          console.log('Error al agregar el producto al carrito:', error);
+        });
+    } else {
+      // El usuario no está logueado, puedes mostrar un mensaje o realizar alguna otra acción
+      console.log("El usuario no está logueado. No se agregó el producto al carrito.");
+    }
   }
+  
 
   componentDidMount() {
     // Realizar una solicitud GET para obtener productos de la API

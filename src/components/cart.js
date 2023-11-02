@@ -114,7 +114,7 @@ export default class Cart extends Component {
             ))}
         </ul>
       ) : (
-        <p>{cartItems.length === 0 ? "You don't have any products in your shopping cart yet." : "You haven't added any products to your cart yet."}</p>
+        <p>{cartItems.length === 0 && "You don't have any products in your shopping cart yet."}</p>
       )}
       </div>
     );
