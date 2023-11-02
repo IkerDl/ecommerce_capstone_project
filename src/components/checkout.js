@@ -73,7 +73,7 @@ export default class CheckoutComponent extends Component {
 
   render() {
     const { step, cardNumber, cardHolder, expiryDate, cvv } = this.state;
-    
+
     if (this.state.redirectToHome) {
         return <Redirect to="/" />;
       }
@@ -88,7 +88,7 @@ export default class CheckoutComponent extends Component {
         <div>
           <h2>Step 1: Enter Card Information</h2>
           <form onSubmit={this.nextStep}>
-            <div>
+            <div className='checkout-step'>
               <label htmlFor="cardNumber">Card Number:</label>
               <input
                 type="text"
@@ -128,13 +128,13 @@ export default class CheckoutComponent extends Component {
                 onChange={this.handleInputChange}
               />
             </div>
-            <button type="submit">Next</button>
+            <button className='next-button' type="submit">Next</button>
           </form>
         </div>
       );
     } else if (step === 2) {
       stepComponent = (
-        <div>
+        <div className='checkout-step'>
           <h2>Step 2: Confirm Payment</h2>
           <p>Card Number: {cardNumber}</p>
           <p>Card Holder: {cardHolder}</p>
@@ -152,10 +152,10 @@ export default class CheckoutComponent extends Component {
               </li>
             ))}
           </ul>
-          <h3>Total Price: ${this.props.location.state.totalPrice.toFixed(2)}</h3>
+          <h3 className='total-price'>Total Price: ${this.props.location.state.totalPrice.toFixed(2)}</h3>
 
-          <button onClick={this.prevStep}>Back</button>
-          <button onClick={(event) => {
+          <button className="back-button" onClick={this.prevStep}>Back</button>
+          <button className="confirm-button" onClick={(event) => {
             this.handleSubmit(event);
             this.emptyCart();
           }}>Confirm Payment</button>
@@ -164,7 +164,7 @@ export default class CheckoutComponent extends Component {
     }
 
     return (
-      <div>
+      <div className='checkout-container'>
         {stepComponent}
       </div>
     );
