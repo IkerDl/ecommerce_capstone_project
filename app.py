@@ -257,36 +257,36 @@ def get_user_cart_items(user_id):
 
 #Editar la cantidad de productos en ese carrito
 
-@app.route('/cart/edit/<int:cart_id>/<int:product_id>', methods=["PUT"])
-def edit_cart_item_quantity(cart_id, product_id):
-    if request.content_type != 'application/json':
-        return jsonify("Error: Los datos deben enviarse en formato JSON!")
+@app.route('/cart/edit_quantity/<int:product_id>', methods=["PUT"])
+def edit_cart_item_quantity(product_id):
+    user_id = request.json.get("user_id")
+    action = request.json.get("action")  # Puede ser "increase" o "decrease"
 
-    post_data = request.get_json()
-    new_quantity = post_data.get('new_quantity')
+    # Obtener el item del carrito del usuario
+    cart_item = db.session.query(Cart).filter(Cart.cart_products_id == product_id, Cart.cart_users_id == user_id).first()
 
-    cart_item = db.session.query(Cart).filter(Cart.cart_id == cart_id, Cart.cart_products_id == product_id).first()
+    product = db.session.query(Product).filter(Product.products_id == product_id).first()
 
-    if not cart_item:
-        return jsonify("El producto no se encuentra en el carrito o el carrito no existe"), 404
+    if cart_item:
+        if action == "increase":
+            cart_item.cart_products_quantity += 1
+        elif action == "decrease" and cart_item.cart_products_quantity > 1:
+            cart_item.cart_products_quantity -= 1
 
-    if new_quantity < 0:
-        return jsonify("La cantidad no puede ser negativa"), 400
+        # Actualizar el precio total
+        cart_item.cart_total_price = product.products_price * cart_item.cart_products_quantity
 
-    cart_item.cart_products_quantity = new_quantity
-    
-    # Obtener el producto asociado al carrito
-    product = cart_item.product
+        db.session.commit()
 
-    if product:
-        cart_item.cart_total_price = new_quantity * product.products_price
+        response_data = {
+            "message": "Cantidad de producto actualizada",
+            "quantity": cart_item.cart_products_quantity,
+        }
+
+        return jsonify(response_data)
     else:
-        # Manejar el escenario donde el producto asociado no es encontrado
-        return jsonify("Producto asociado no encontrado"), 404
+        return jsonify("Producto no encontrado en el carrito del usuario"), 404
 
-    db.session.commit()
-
-    return jsonify("Cantidad del producto en el carrito actualizada exitosamente")
 
 #Vaciar carrito
 @app.route('/cart/empty/<int:cart_id>', methods=["DELETE"])

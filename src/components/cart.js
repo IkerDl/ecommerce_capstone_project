@@ -40,19 +40,26 @@ export default class Cart extends Component {
   }
 
   // Función para editar la cantidad de un producto en el carrito
-  editCartItemQuantity = (productId, newQuantity) => {
-    axios.put(`http://localhost:5000/cart/edit/${this.userId}/${productId}`, { new_quantity: newQuantity })
+  editCartItemQuantity = (productId, action) => {
+    const userId = this.props.userId;
+    axios.put(`http://localhost:5000/cart/edit_quantity/${productId}`, { user_id: userId, action })
       .then(response => {
-        this.fetchCartItems();
-        // Actualizar el estado del carrito 
-        console.log(`Cantidad del producto ID ${productId} actualizada a ${newQuantity}`);
+        // Actualizar el estado con la nueva cantidad del producto en el carrito
+        const updatedCart = this.state.cartItems.map(item => {
+          if (item.product_id === productId) {
+            return { ...item, quantity: response.data.quantity };
+          }
+          return item;
+        });
+        this.setState({ cartItems: updatedCart });
       })
       .catch(error => {
-        console.error('Error al editar la cantidad del producto en el carrito:', error);
+        console.log('Error al actualizar la cantidad del producto en el carrito:', error);
       });
   }
+  
 
-  removeFromCart = (productId) => {
+  removeFromCart = (productId,) => {
     axios.delete(`http://localhost:5000/cart/remove/${this.userId}/${productId}`)
     .then(response => {
       this.fetchCartItems();
@@ -83,10 +90,10 @@ export default class Cart extends Component {
                   <p>{item.product_name}</p>
                   <p>Price: ${item.product_price}</p>
                   <p>Quantity: {item.quantity}</p>
-                  <button onClick={() => this.editCartItemQuantity(item.product_id, item.quantity + 1)}>
+                  <button onClick={() => this.editCartItemQuantity(item.product_id, "increase")}>
                     <FontAwesomeIcon icon={faPlus} />
                   </button>
-                  <button onClick={() => this.editCartItemQuantity(item.product_id, item.quantity - 1)}>
+                  <button onClick={() => this.editCartItemQuantity(item.product_id, "decrease")}>
                     <FontAwesomeIcon icon={faMinus} />
                   </button>
                 </div>
