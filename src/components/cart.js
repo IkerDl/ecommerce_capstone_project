@@ -14,7 +14,7 @@ export default class Cart extends Component {
     this.userId = this.props.userId;
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (this.userId) {
       this.fetchCartItems();
     }
