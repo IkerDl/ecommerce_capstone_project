@@ -50,9 +50,14 @@ export default class NavBar extends Component {
           </div>
         )}
 
-        <div className='cart-icon'>
+        <div className='cart-icon' >
+        <Link to ="/cart">
           <FontAwesomeIcon icon={faCartShopping} />
           <span>{this.state.cartItemsCount}</span>
+        </Link>
+          
+         
+          
         </div>
       </div>
     );

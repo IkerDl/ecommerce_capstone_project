@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import Home from './pages/home';
 import Contact from './pages/contact';
 import AuthPage from './pages/auth-page';
+import Cart from './cart';
 
 export default class App extends Component {
   constructor(props) {
@@ -51,6 +52,8 @@ export default class App extends Component {
               />
             </Route> 
             <Route path="/contact" component={Contact} />
+            <Route path="/cart" render={(props) => <Cart {...props} userId={this.state.userId} />} />
+
           </Switch>
           
         </Router>

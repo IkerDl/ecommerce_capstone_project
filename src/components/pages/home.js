@@ -11,7 +11,6 @@ export default function({ isUserLoggedIn, onLogout, userId }) {
         <NavBar isUserLoggedIn={isUserLoggedIn} onLogout={onLogout} />
         <Carrousel />
         <ProductsComponent userId={userId} />
-        <Cart userId={userId} />
         
     </div>
   );
