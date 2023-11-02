@@ -236,9 +236,6 @@ def get_all_carts():
 def get_user_cart_items(user_id):
     user_cart = db.session.query(Cart).filter(Cart.cart_users_id == user_id).all()
 
-    if not user_cart:
-        return jsonify("Carrito no encontrado para el usuario"), 404
-
     user_cart_products = []
     for cart_item in user_cart:
         product = db.session.query(Product).filter(Product.products_id == cart_item.cart_products_id).first()
@@ -301,21 +298,17 @@ def empty_cart(cart_id):
         return jsonify("Carrito no encontrado.")
 
 #Eliminar un producto del carrito
-@app.route('/cart/remove/<int:cart_id>/<int:product_id>', methods=["DELETE"])
-def remove_from_cart(cart_id, product_id):
-    cart = db.session.query(Cart).filter(Cart.cart_id == cart_id).first()
+@app.route('/cart/remove/<int:user_id>/<int:product_id>', methods=["DELETE"])
+def remove_from_cart(user_id, product_id):
+    cart_item = db.session.query(Cart).filter(Cart.cart_users_id == user_id, Cart.cart_products_id == product_id).first()
 
-    if cart:
-        cart_item = db.session.query(Cart).filter(Cart.cart_id == cart_id, Cart.cart_products_id == product_id).first()
+    if cart_item:
+        db.session.delete(cart_item)
+        db.session.commit()
+        return jsonify(f"Producto {product_id} ha sido eliminado del carrito del usuario {user_id}.")
 
-        if cart_item:
-            db.session.delete(cart_item)
-            db.session.commit()
-            return jsonify(f"Producto {product_id} ha sido eliminado del carrito {cart_id}.")
-        else:
-            return jsonify(f"Producto {product_id} no encontrado en el carrito {cart_id}.")
-    else:
-        return jsonify(f"Carrito {cart_id} no encontrado.")
+    return jsonify(f"Producto {product_id} no encontrado en el carrito del usuario {user_id}."), 404
+
 
 #Añadir producto a un carrito 
 @app.route('/cart/add/<int:product_id>', methods=["POST"])

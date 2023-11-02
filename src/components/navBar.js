@@ -17,7 +17,7 @@ export default class NavBar extends Component {
     // Por ejemplo, puedes llamar a una función que esté en tus props para hacerlo.
     this.props.onLogout();
     this.setState({ isUserLoggedIn: false });
-    this.props.history.push("/");
+    
     
   };
 
@@ -40,7 +40,7 @@ export default class NavBar extends Component {
 
         {this.props.isUserLoggedIn ? (
           <div>
-            <Link to="/logout" onClick={this.handleLogout}>
+            <Link to="/"onClick={this.handleLogout}>
               Log Out
             </Link>
           </div>
