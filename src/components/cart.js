@@ -133,7 +133,11 @@ export default class Cart extends Component {
         {cartItems.length > 0 && (
           <div className='cart-summary'>
             <p>Total Price: ${totalPrice.toFixed(2)}</p>
-            <Link to="/checkout">Proceed to Checkout</Link>
+            <Link to={{
+              pathname: '/checkout',
+              state: { cartItems: this.state.cartItems, totalPrice:totalPrice, userId: this.userId }
+            }}>Proceed to Checkout</Link>
+
           </div>
         )}
       </div>

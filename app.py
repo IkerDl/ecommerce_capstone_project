@@ -285,17 +285,19 @@ def edit_cart_item_quantity(product_id):
         return jsonify("Producto no encontrado en el carrito del usuario"), 404
 
 
-#Vaciar carrito
-@app.route('/cart/empty/<int:cart_id>', methods=["DELETE"])
-def empty_cart(cart_id):
-    cart = db.session.query(Cart).filter(Cart.cart_id == cart_id).first()
+# Vaciar el carrito de un usuario específico
+@app.route('/cart/empty/<int:user_id>', methods=["DELETE"])
+def empty_cart(user_id):
+    cart_items = db.session.query(Cart).filter(Cart.cart_users_id == user_id).all()
 
-    if cart:
-        db.session.query(Cart).filter(Cart.cart_id == cart_id).delete()
+    if cart_items:
+        for cart_item in cart_items:
+            db.session.delete(cart_item)
         db.session.commit()
-        return jsonify(f"El carrito {cart_id} ha sido vaciado.")
+        return jsonify(f"El carrito del usuario {user_id} ha sido vaciado por completo.")
     else:
-        return jsonify("Carrito no encontrado.")
+        return jsonify(f"El carrito del usuario {user_id} ya está vacío o no encontrado.")
+
 
 #Eliminar un producto del carrito
 @app.route('/cart/remove/<int:user_id>/<int:product_id>', methods=["DELETE"])
