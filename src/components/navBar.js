@@ -26,39 +26,38 @@ export default class NavBar extends Component {
 
     return (
       <div className='navbar-wrapper'>
+        
         <div className='logo-container'>
-          <img src="/assets/logo.jpg" alt="" />
+          <Link to="/">
+            <img src="/assets/logo.jpg" alt="logo" />
+          </Link>
         </div>
 
-        <div className='contact-container'>
-          <h2>Contact</h2>
-        </div>
+        <div className='right-column'>
+          <div className='auth-container'>
+            {this.props.isUserLoggedIn ? (
+              <div>
+                <Link to="/"onClick={this.handleLogout}>
+                  Log Out
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <Link to="/auth">Login</Link>
+              </div>
+            )}
+          </div>
+          
 
-        <div className='about-container'>
-          <h2>About us</h2>
-        </div>
-
-        {this.props.isUserLoggedIn ? (
-          <div>
-            <Link to="/"onClick={this.handleLogout}>
-              Log Out
+          <div className='cart-icon' >
+            <Link to ="/cart">
+              <FontAwesomeIcon icon={faCartShopping} />
+              <span>{this.state.cartItemsCount}</span>
             </Link>
+            
           </div>
-        ) : (
-          <div>
-            <Link to="/auth">Login</Link>
-          </div>
-        )}
-
-        <div className='cart-icon' >
-        <Link to ="/cart">
-          <FontAwesomeIcon icon={faCartShopping} />
-          <span>{this.state.cartItemsCount}</span>
-        </Link>
-          
-         
-          
         </div>
+        
       </div>
     );
   }

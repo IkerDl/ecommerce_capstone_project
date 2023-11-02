@@ -27,14 +27,6 @@ export default class App extends Component {
     return (
       <div className='container'>
         <Router>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/auth">Auth</Link>
-            <Link to="/contact">Contact</Link>
-          </nav>
-
-          
-
           <Switch>
             <Route exact path="/" render={() => (
               <Home

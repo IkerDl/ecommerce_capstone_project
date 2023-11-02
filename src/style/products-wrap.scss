@@ -1,6 +1,7 @@
 .general-wrapper {
     max-width: 1200px;
     margin: 0 auto;
+    
 
     h2{
         display: flex;
@@ -15,59 +16,73 @@
         justify-items: center;
         padding: 5px;
         max-width: 95%;
+    }
 
-        .product {
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-            height: 500px; 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+    @media screen and (max-width: 700px) {
+        .products-wrapper {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
 
-           
+            .product img {
+                width: 50%;
+                
+            }
         }
-
-        .product img {
-            width: 200px; 
-            height: 200px; 
-            object-fit: cover; 
-            border-radius: 10px;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            margin: 10px 0;
-            color:rgb(116,115,115);
-        }
-
-        p {
-            font-size:1.06rem;
-           
-        }
-        
-        .product p:last-child {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #fcff33;
-        }
-
-        .cart-icon{
-            color: white;
-            transition: color 0.3s;
-            transform: scale(1.5);
-            transition: transform 0.5s;
-            
-        }
-
-        .cart-icon:hover {
-            color: rgba(66,176,41,255); 
-            transform: scale(2);
-            
-        }
-          
-
 
     }
+
+    .product {
+        width: 100%;
+        padding: 20px;
+        text-align: center;
+        height: 500px; 
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .product img {
+        width: 200px; 
+        height: 250px; 
+        object-fit: cover; 
+        border-radius: 10px;
+        margin-bottom: 5px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin: 10px 0;
+        color:rgb(116,115,115);
+    }
+
+    p {
+        font-size:1.06rem;
+        
+    }
+    
+    .product p:last-child {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #fcff33;
+    }
+
+    .cart-icon{
+        color: white;
+        transition: color 0.3s;
+        transform: scale(1.5);
+        transition: transform 0.5s;
+        margin-top: auto;
+        
+    }
+
+    .cart-icon:hover {
+        color: rgba(66,176,41,255); 
+        transform: scale(2);
+        
+    }
+
     
 }
+
+
+  

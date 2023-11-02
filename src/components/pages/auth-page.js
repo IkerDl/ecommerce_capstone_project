@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from 'react-router-dom';
 import axios from "axios";
-
+import { Link } from 'react-router-dom';
 
 class AuthPage extends Component {
   constructor(props) {
@@ -58,6 +58,12 @@ class AuthPage extends Component {
   render() {
     return (
       <div className="user-auth">
+        <div className='logo-container'>
+          <Link to="/">
+            <img src="/assets/logo.jpg" alt="" />
+          </Link>
+        </div>
+
         <h2>{this.state.isRegister ? "Registration" : "User Login"}</h2>
         {this.state.error && <p className="error-message">{this.state.error}</p>}
         <form onSubmit={this.handleSubmit}>
