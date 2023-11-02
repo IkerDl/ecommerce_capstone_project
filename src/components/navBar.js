@@ -8,7 +8,6 @@ export default class NavBar extends Component {
     super(props);
     this.state = {
       isUserLoggedIn: this.props.isUserLoggedIn,
-      cartItemsCount: 0,
     };
   }
 
@@ -52,7 +51,6 @@ export default class NavBar extends Component {
           <div className='cart-icon' >
             <Link to ="/cart">
               <FontAwesomeIcon icon={faCartShopping} />
-              <span>{this.state.cartItemsCount}</span>
             </Link>
             
           </div>

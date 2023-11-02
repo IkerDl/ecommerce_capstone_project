@@ -1,6 +1,7 @@
 .general-wrapper {
     max-width: 1200px;
     margin: 0 auto;
+    margin-bottom: 5px;
     
 
     h2{
@@ -24,7 +25,7 @@
             grid-template-columns: repeat(1, 1fr);
 
             .product img {
-                width: 50%;
+                width:90%;
                 
             }
         }
@@ -39,6 +40,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        align-items: center;
     }
 
     .product img {
@@ -68,7 +70,6 @@
 
     .cart-icon{
         color: white;
-        transition: color 0.3s;
         transform: scale(1.5);
         transition: transform 0.5s;
         margin-top: auto;
@@ -80,6 +81,7 @@
         transform: scale(2);
         
     }
+    
 
     
 }

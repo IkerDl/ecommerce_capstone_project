@@ -90,8 +90,13 @@ export default class Cart extends Component {
   }
 
 
+
   render() {
     const { cartItems } = this.state;
+
+    const totalPrice = cartItems.reduce((total, item) => {
+      return total + item.product_price * item.quantity;
+    }, 0);
 
     return (
       <div className="cart">
@@ -125,7 +130,12 @@ export default class Cart extends Component {
             <p>{cartItems.length === 0 && "You don't have any products in your shopping cart yet."}</p>
         )}
         </div>
-        
+        {cartItems.length > 0 && (
+          <div className='cart-summary'>
+            <p>Total Price: ${totalPrice.toFixed(2)}</p>
+            <Link to="/checkout">Proceed to Checkout</Link>
+          </div>
+        )}
       </div>
     );
   }
