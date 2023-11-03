@@ -24,36 +24,30 @@ export default class Cart extends Component {
 
   fetchCartItems() {
     if (!this.userId) {
-      return; // Si no hay usuario logueado, no hay carrito que mostrar
+      return; // If user is not logged in, no cart
     }
     
-    // Realiza una solicitud GET para obtener los productos del carrito del usuario
     axios.get(`http://localhost:5000/cart/user/${this.userId}`)
       .then(response => {
         if (response.status === 200) {
           this.setState({ cartItems: response.data });
         } else if (response.status === 404) {
-          console.log('El carrito no fue encontrado para el usuario');
-          // Puedes mostrar un mensaje en la interfaz de usuario indicando que el carrito está vacío.
+          console.log('The cart was not found for the user');
           this.setState({ cartItems: [] }); // Establece cartItems como un array vacío
         }
       })
       .catch(error => {
-        console.error('Error al obtener los productos del carrito del usuario:', error);
+        console.error('Error fetching the users cart products:', error);
       });
   }
   
-
-  // Función para editar la cantidad de un producto en el carrito
   editCartItemQuantity = (productId, action) => {
     const userId = this.props.userId;
     axios.put(`http://localhost:5000/cart/edit_quantity/${productId}`, { user_id: userId, action })
       .then(response => {
         if (response.data.quantity <1 && action === "decrease") {
-          // La cantidad es 1 y se ha restado 1, elimina el producto del carrito
           this.removeFromCart(productId);
         } else {
-          // La cantidad no es 1 o no se ha restado 1, actualiza la cantidad normalmente
           const updatedCart = this.state.cartItems.map(item => {
             if (item.product_id === productId) {
               return { ...item, quantity: response.data.quantity };
@@ -64,7 +58,7 @@ export default class Cart extends Component {
         }
       })
       .catch(error => {
-        console.log('Error al actualizar la cantidad del producto en el carrito:', error);
+        console.log('Error updating the quantity of the product in the cart:', error);
       });
   }
   
@@ -74,19 +68,19 @@ export default class Cart extends Component {
     const userId = this.props.userId;
     axios.delete(`http://localhost:5000/cart/remove/${userId}/${productId}`)
       .then(response => {
-        // Eliminar el producto del carrito en la interfaz de usuario
+        
         const updatedCart = this.state.cartItems.filter(item => item.product_id !== productId);
         this.setState({ cartItems: updatedCart });
       })
       .catch(error => {
-        console.log('Error al eliminar el producto del carrito:', error);
+        console.log('Error removing the product from the cart:', error);
       });
   }
   
 
   emptyCart = () => {
     this.setState({ cartItems: [] });
-    console.log('Carrito vaciado exitosamente.');
+    console.log('Shopping cart successfully emptied');
   }
 
 

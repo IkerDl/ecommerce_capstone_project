@@ -22,28 +22,25 @@ class LoginPage extends Component {
     const { email, password } = this.state;
 
     try {
-      // Enviar datos al servidor para el inicio de sesión
       const response = await axios.post("http://localhost:5000/login", {
         users_email: email,
         users_password: password
       });
 
       if (response.status === 200) {
-        // El inicio de sesión fue exitoso, redirige a la página principal u otra página deseada
         const data = response.data;
         this.props.onLogin(data.user_id);
         this.props.history.push("/");
       } else{
         if (response.status === 401) {
-          this.setState({ error: "Credenciales incorrectas. Por favor, verifica tu email y contraseña." });
+          this.setState({ error: "Incorrect credentials. Please verify your email and password" });
         } else {
-          // Maneja errores de inicio de sesión, como credenciales incorrectas
           const data = response.data
           this.setState({ error: data.message });
         }
       }
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
+      console.error("Error logging in:", error);
     }
   };
 

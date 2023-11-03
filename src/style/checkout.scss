@@ -1,4 +1,3 @@
-/* Estilos para el contenedor del proceso de pago */
 .checkout-container {
   max-width: 400px;
   margin: 0 auto;
@@ -10,12 +9,10 @@
   font-family: Arial, sans-serif;
 }
 
-/* Estilos para los pasos del proceso de pago */
 .checkout-step {
   margin: 20px 0;
 }
 
-/* Estilos para los botones del proceso de pago */
 .checkout-container button {
   color: #fff;
   border: none;
@@ -34,7 +31,6 @@
   background-color: #6eb300;
 }
 
-/* Estilos para el botón de confirmación */
 .confirm-button {
   background-color: green;
   color: #fff;
@@ -44,7 +40,6 @@
   background-color: rgba(227, 243, 223, 1);
 }
 
-/* Estilos para el botón de retroceso */
 .back-button {
   background-color: red;
   color: #fff;
@@ -54,12 +49,10 @@
   background-color: #a51d29;
 }
 
-/* Estilos para los elementos de texto */
 .checkout-container label {
   font-weight: bold;
 }
 
-/* Estilos para la lista de productos */
 .cart-item {
   list-style: none;
   padding: 10px;
@@ -69,7 +62,6 @@
   border-radius: 5px;
 }
 
-/* Estilos para el precio total */
 .total-price {
   font-weight: bold;
   font-size: 1.2rem;

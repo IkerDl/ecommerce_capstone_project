@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import axios from "axios";
-import { Link } from 'react-router-dom';
+
 
 class AuthPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoggedIn : false,
-      isRegister: true, // Para alternar entre registro e inicio de sesión
+      isRegister: true, 
       firstname: "",
       lastname: "",
       email: "",
@@ -32,8 +32,7 @@ class AuthPage extends Component {
       const body = isRegister
         ? { users_firstname: firstname, users_lastname: lastname, users_email: email, users_password: password }
         : { users_email: email, users_password: password };
-  
-      // Enviar datos al servidor para el registro o inicio de sesión utilizando Axios
+
       const response = await axios.post(url, body);
   
       if (response.status === 200) {
@@ -41,7 +40,6 @@ class AuthPage extends Component {
         this.props.onLogin(data.user_id); // Pasa el ID del usuario al componente App
         this.props.history.push("/");
       } else {
-        // Maneja errores de registro o inicio de sesión, como credenciales incorrectas
         const data = response.data;
         this.setState({ error: data.message });
       }

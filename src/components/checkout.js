@@ -8,7 +8,7 @@ export default class CheckoutComponent extends Component {
     super(props);
 
     this.state = {
-      step: 1, // Paso actual del proceso de pago
+      step: 1, //current step in the payment process
       cardNumber: '',
       cardHolder: '',
       expiryDate: '',
@@ -17,35 +17,30 @@ export default class CheckoutComponent extends Component {
   }
 
   emptyCart = () => {
-    const userId = this.props.location.state.userId; // Asegúrate de tener acceso al ID del usuario desde props
+    const userId = this.props.location.state.userId; 
     axios.delete(`http://localhost:5000/cart/empty/${userId}`)
       .then(response => {
-        // Lógica para manejar la respuesta del servidor (puede ser una redirección, un mensaje de éxito, etc.)
-        console.log('Carrito vaciado exitosamente:', response.data);
-        // Puedes redirigir al usuario a una página de confirmación de pago o a donde desees.
+        console.log('Shopping cart emptied successfully:', response.data);
       })
       .catch(error => {
-        console.error('Error al vaciar el carrito:', error);
+        console.error('Error while emptying the shopping cart:', error);
       });
     }
   
 
   handleInputChange = (event) => {
     const { name, value } = event.target;
-
     this.setState({
       [name]: value,
     });
   }
 
-  // Función para avanzar al siguiente paso del proceso de pago
   nextStep = () => {
     this.setState((prevState) => ({
       step: prevState.step + 1,
     }));
   }
 
-  // Función para retroceder al paso anterior del proceso de pago
   prevStep = () => {
     this.setState((prevState) => ({
       step: prevState.step - 1,
@@ -57,16 +52,8 @@ export default class CheckoutComponent extends Component {
     const userId = this.props.location.state.userId;
     alert('Payment completed successfully!');
     this.setState({ redirectToHome: true})
-    // Aquí puedes agregar la lógica para procesar el pago en el último paso del proceso
-    // Puedes enviar los datos de pago (cardNumber, cardHolder, expiryDate, cvv) a tu servidor para validar y procesar el pago.
-    // También puedes acceder a los datos del carrito desde this.props.location.state.
-
-    console.log('Datos de pago:', this.state);
-    console.log('Datos del carrito:', this.props.location.state);
-
-    // Puedes redirigir al usuario a una página de confirmación de pago después de procesar el pago.
-    // Ejemplo:
-    // this.props.history.push('/payment-confirmation');
+    console.log('Payment data:', this.state);
+    console.log('Cart data:', this.props.location.state);
   }
 
   
@@ -77,9 +64,6 @@ export default class CheckoutComponent extends Component {
     if (this.state.redirectToHome) {
         return <Redirect to="/" />;
       }
-
-    // Puedes definir componentes diferentes para cada paso del proceso de pago
-    // y mostrar el componente correspondiente según el valor de 'step'.
 
     let stepComponent;
 
@@ -141,7 +125,6 @@ export default class CheckoutComponent extends Component {
           <p>Expiry Date: {expiryDate}</p>
           <p>CVV: {cvv}</p>
           
-          {/* Información del carrito obtenida de this.props.location.state */}
           <h3>Cart Contents:</h3>
           <ul>
             {this.props.location.state.cartItems.map((item, index) => (

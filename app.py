@@ -9,6 +9,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 
 app = Flask(__name__)
 CORS(app)
+
 app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://root:,.password21,.@localhost/ecommerce_data_base'
 app.config['SECRET_KEY'] = 'secret_password31'
 
@@ -152,12 +153,6 @@ def edit_product_id(id):
     db.session.commit()
     return jsonify(product_schema.dump(edit_product_id))
 
-@app.route('/product/delete/<id>', methods=["DELETE"])
-def delete_product_id(id):
-    delete_product = db.session.query(Product).filter(Product.products_id == id).first()
-    db.session.delete(delete_product)
-    db.session.commit()
-    return jsonify("Your product has been deleted!", product_schema.dump(delete_product))
 
 #Get users
 @app.route('/user/get', methods=["GET"])
@@ -165,6 +160,7 @@ def get_users():
     all_users = db.session.query(User).all()
     result = users_schema.dump(all_users)
     return jsonify(result)
+
 #Get user by id
 @app.route('/user/get/<id>', methods=["GET"])
 def get_user(id):
@@ -184,7 +180,7 @@ def register():
 
     existing_user = User.query.filter_by(users_email=users_email).first()
     if existing_user:
-        return jsonify({'message': 'La dirección de correo electrónico ya está registrada'}), 409
+        return jsonify({'message': 'The email address is already registered'}), 409
 
 
     new_record = User(users_firstname,users_lastname,users_email, users_password)
@@ -192,12 +188,11 @@ def register():
     db.session.commit()
 
     return jsonify({
-        'message': 'Usuario registrado exitosamente',
+        'message': 'User registered successfully',
         'user_id': new_record.users_id
     })
 
 #Login
-
 @app.route("/login", methods=["POST"])
 def login():
     if request.content_type != 'application/json':
@@ -223,14 +218,11 @@ def logout():
 
     return jsonify("User logged out")
 
-# Ruta para obtener todos los carritos
 @app.route('/carts', methods=["GET"])
 def get_all_carts():
     all_carts = db.session.query(Cart).all()
     result = carts_schema.dump(all_carts)
     return jsonify(result)
-
-#Ver los productos de un carrito por su id.
 
 @app.route('/cart/user/<int:user_id>', methods=["GET"])
 def get_user_cart_items(user_id):
@@ -251,15 +243,11 @@ def get_user_cart_items(user_id):
 
     return jsonify(user_cart_products)
 
-
-#Editar la cantidad de productos en ese carrito
-
 @app.route('/cart/edit_quantity/<int:product_id>', methods=["PUT"])
 def edit_cart_item_quantity(product_id):
     user_id = request.json.get("user_id")
-    action = request.json.get("action")  # Puede ser "increase" o "decrease"
+    action = request.json.get("action") 
 
-    # Obtener el item del carrito del usuario
     cart_item = db.session.query(Cart).filter(Cart.cart_products_id == product_id, Cart.cart_users_id == user_id).first()
 
     product = db.session.query(Product).filter(Product.products_id == product_id).first()
@@ -270,22 +258,22 @@ def edit_cart_item_quantity(product_id):
         elif action == "decrease" and cart_item.cart_products_quantity > 1:
             cart_item.cart_products_quantity -= 1
 
-        # Actualizar el precio total
+        # Update the total price
         cart_item.cart_total_price = product.products_price * cart_item.cart_products_quantity
 
         db.session.commit()
 
         response_data = {
-            "message": "Cantidad de producto actualizada",
+            "message": "Product quantity updated",
             "quantity": cart_item.cart_products_quantity,
         }
 
         return jsonify(response_data)
     else:
-        return jsonify("Producto no encontrado en el carrito del usuario"), 404
+        return jsonify("Product not found in the users cart"), 404
 
 
-# Vaciar el carrito de un usuario específico
+# Empty the cart of a specific user
 @app.route('/cart/empty/<int:user_id>', methods=["DELETE"])
 def empty_cart(user_id):
     cart_items = db.session.query(Cart).filter(Cart.cart_users_id == user_id).all()
@@ -294,12 +282,12 @@ def empty_cart(user_id):
         for cart_item in cart_items:
             db.session.delete(cart_item)
         db.session.commit()
-        return jsonify(f"El carrito del usuario {user_id} ha sido vaciado por completo.")
+        return jsonify(f"The users cart with id {user_id} has been completely emptied")
     else:
-        return jsonify(f"El carrito del usuario {user_id} ya está vacío o no encontrado.")
+        return jsonify(f"The users cart with id {user_id} is already empty or not found")
 
 
-#Eliminar un producto del carrito
+
 @app.route('/cart/remove/<int:user_id>/<int:product_id>', methods=["DELETE"])
 def remove_from_cart(user_id, product_id):
     cart_item = db.session.query(Cart).filter(Cart.cart_users_id == user_id, Cart.cart_products_id == product_id).first()
@@ -307,12 +295,11 @@ def remove_from_cart(user_id, product_id):
     if cart_item:
         db.session.delete(cart_item)
         db.session.commit()
-        return jsonify(f"Producto {product_id} ha sido eliminado del carrito del usuario {user_id}.")
+        return jsonify(f"Product {product_id} has been removed from the users cart {user_id}.")
 
-    return jsonify(f"Producto {product_id} no encontrado en el carrito del usuario {user_id}."), 404
+    return jsonify(f"Product {product_id} not found in the users cart {user_id}."), 404
 
 
-#Añadir producto a un carrito 
 @app.route('/cart/add/<int:product_id>', methods=["POST"])
 
 def add_to_cart(product_id):
@@ -320,17 +307,17 @@ def add_to_cart(product_id):
     product = db.session.query(Product).filter(Product.products_id == product_id).first()
 
     if product is None:
-        return jsonify("Producto no encontrado"), 404
+        return jsonify("Product not found"), 404
 
     cart_item = db.session.query(Cart).filter(Cart.cart_products_id == product_id, Cart.cart_users_id == user_id).first()
 
     if cart_item:
-        cart_item.cart_products_quantity += 1  # Puedes ajustar la cantidad según tus necesidades
+        cart_item.cart_products_quantity += 1  
         cart_item.cart_total_price = product.products_price * cart_item.cart_products_quantity
     else:
         cart_item = Cart(
             cart_products_id=product.products_id,
-            cart_products_quantity=1,  # Puedes ajustar la cantidad según tus necesidades
+            cart_products_quantity=1,  
             cart_users_id=user_id,
             cart_total_price=product.products_price
         )
@@ -339,7 +326,7 @@ def add_to_cart(product_id):
     db.session.commit()
 
     response_data = {
-        "message": "Producto agregado al carrito",
+        "message": "Product added to the cart",
         "quantity": cart_item.cart_products_quantity,
         "product_details": {
             "product_id": product.products_id,

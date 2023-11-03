@@ -12,16 +12,11 @@ export default class NavBar extends Component {
   }
 
   handleLogout = () => {
-    // Realiza aquí la lógica para desloguear al usuario
-    // Por ejemplo, puedes llamar a una función que esté en tus props para hacerlo.
     this.props.onLogout();
     this.setState({ isUserLoggedIn: false });
-    
-    
   };
 
   render() {
-    const { cartItemsCount, isCartOpen } = this.state;
 
     return (
       <div className='navbar-wrapper'>
