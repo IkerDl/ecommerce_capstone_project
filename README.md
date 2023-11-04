@@ -1,5 +1,13 @@
-# React with Bootstrap Starter Project
+# My eCommerce Project
 
-> Provided for the students of the [Bottega Code School](https://bottega.tech/)
+This is a small online eCommerce project developed in Python with the Flask framework. Below, you'll find some key features of this application:
 
-*Fork from [es6-webpack2-starter](https://github.com/micooz/es6-webpack2-starter)*
+## Key Features
+
+- **Product Catalog**: Offers users a wide variety of products they can browse and purchase.
+- **User Registration**: Allows users to register and view their associated shopping cart.
+- **Shopping Cart**: Enables users to add products to their shopping cart, adjust quantities, and remove products as needed.
+
+## Author
+
+This project was developed by Iker.
