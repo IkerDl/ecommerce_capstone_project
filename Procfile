@@ -1,2 +1,2 @@
-web: node server.js
-web: python backend/app.py
+web: npm run build
+web: pipenv run python app.py
